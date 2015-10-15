@@ -1,0 +1,187 @@
+
+## SQL Questions
+
+Using the SQLite3 Database file given to you as the source of data to answer the questions.  Copy and the SQL command you have used to get the answer, and paste it below the question, along with the result they gave.
+
+
+
+1. Select the names of all users.
+sqlite> select * from users;
+1|Rick Henri
+2|Michael Pavling
+3|Sandy McMillan
+4|Chae Cramb
+5|Syed Atique
+6|Simon Osborne
+7|Kieran Pringle
+8|Craig Lamont
+9|Zsolt Podoba
+10|Keith Martin
+11|Peter Hyder
+12|Alaere Samuel
+13|Kathryn Kiernan
+14|Iwona Sztorc
+15|Nevin Officer
+16|Graeme Stewart
+17|Neil McGuire
+18|Graeme Kean
+19|Rick Henri
+20|Michael Pavling
+21|Sandy McMillan
+22|Chae Cramb
+23|Syed Atique
+24|Simon Osborne
+25|Kieran Pringle
+26|Craig Lamont
+27|Zsolt Podoba
+28|Keith Martin
+29|Peter Hyder
+30|Alaere Samuel
+31|Kathryn Kiernan
+32|Iwona Sztorc
+33|Nevin Officer
+34|Graeme Stewart
+35|Neil McGuire
+36|Graeme Kean
+
+2. Select the names of all shows that cost less than £15.
+sqlite> select name from shows where price < 15;
+Le Haggis
+Paul Dabek Mischief 
+Best of Burlesque
+Two become One
+Urinetown
+Two girls, one cup of comedy
+
+3. Select the names and prices of all shows, ordered by price in ascending order.
+sqlite> select name, price from shows order by price;
+Two girls, one cup of comedy|6.0
+Best of Burlesque|7.99
+Two become One|8.5
+Urinetown|8.5
+Le Haggis|12.99
+Paul Dabek Mischief |12.99
+Shitfaced Shakespeare|16.5
+Game of Thrones - The Musical|16.5
+Joe Stilgoe: Songs on Film – The Sequel|16.5
+Camille O'Sullivan|17.99
+Aaabeduation – A Magic Show|17.99
+Balletronics|32.0
+Edinburgh Royal Tattoo|32.99
+
+4. Select the average price of all shows.
+sqlite> select avg(price) shows;
+Error: no such column: price
+sqlite> select avg(price) from shows;
+15.9569230769231
+
+5. Select the price of the least expensive show.
+sqlite> select min(price) from shows;
+6.0
+
+6. Select the sum of the price of all shows.
+sqlite> select sum(price) from shows;
+207.44
+
+7. Select the sum of the price of all shows whose prices is less than £20.
+sqlite> select sum(price) from shows where price < 20;
+142.45
+
+8. Select the name and price of the most expensive show.
+sqlite> select max(price), name from shows;
+32.99|Edinburgh Royal Tattoo
+
+9. Select the name and price of the second from cheapest show.
+sqlite> select (min(price)+1), name from shows;
+7.0|Two girls, one cup of comedy
+
+9. Select the time for the Edinburgh Royal Tattoo.
+sqlite> select time from times where show_id = (select id from shows where name = 'Edinburgh Royal Tattoo');
+22:00
+
+10. Select the names of all users whose names start with the letter "N".
+sqlite> select name from users where instr(name, 'N') > 0;
+Nevin Officer
+Neil McGuire
+
+12. Select the names of users whose names contain "mi".
+sqlite> select name from users where name like "%mi%";
+Michael Pavling
+Sandy McMillan
+
+13. Select the number of users who want to see "Shitfaced Shakespeare".
+select name from users where id = (select user_id from shows_users where show_id = (select id from shows where name = 'Shitfaced Shakespeare'));
+Sandy McMillan
+
+14. Select all of the user names and the count of shows they're going to see.
+sqlite> select name, count(*) from shows_users join users on users.id=shows_users.user_id group by user_id;
+Rick Henri|5
+Michael Pavling|5
+Sandy McMillan|6
+Chae Cramb|4
+Syed Atique|4
+Simon Osborne|4
+Kieran Pringle|4
+Craig Lamont|5
+Zsolt Podoba|7
+Keith Martin|5
+Peter Hyder|5
+Alaere Samuel|6
+Kathryn Kiernan|4
+Iwona Sztorc|4
+Nevin Officer|4
+Graeme Stewart|4
+Neil McGuire|5
+
+15. SELECT all users who are going to a show at 17:15.
+select name from users where id in (select user_id from shows_users where show_id in (select show_id from times where time = '17:15'));
+Rick Henri
+Sandy McMillan
+Syed Atique
+Craig Lamont
+
+
+16. Insert a user with the name "Antonio Goncalves" into the users table.
+sqlite> insert into "users" (name) values ('Antonio Goncalves');
+
+17. Select the id of the user with your name.
+sqlite> select id from users where name=('Peter Hyder');
+11
+
+18. Insert a record that Antonio Goncalves wants to attend the show "Two girls, one cup of comedy".
+sqlite> insert into shows_users (user_id, show_id) values (19, 12);
+sqlite> insert into shows_users (user_id, show_id) values ((select id from users where name=('Antonio Goncalves')), (select id from shows where name=('Two girls, one cup of comedy')));
+
+19. Updates the name of the "Antonio Goncalves" user to be "Tony Goncalves".
+sqlite> update users set name ='Tony Goncalves' where name ='Antonio Goncalves'; 
+sqlite> select * from users;                                                    1|Rick Henri
+2|Michael Pavling
+3|Sandy McMillan
+4|Chae Cramb
+5|Syed Atique
+6|Simon Osborne
+7|Kieran Pringle
+8|Craig Lamont
+9|Zsolt Podoba
+10|Keith Martin
+11|Peter Hyder
+12|Alaere Samuel
+13|Kathryn Kiernan
+14|Iwona Sztorc
+15|Nevin Officer
+16|Graeme Stewart
+17|Neil McGuire
+18|Graeme Kean
+19|Tony Goncalves
+
+20. Deletes the user with the name 'Tony Goncalves'.
+sqlite> delete from users where (name) = ('Tony Goncalves');
+
+21. Deletes the shows for the user you just deleted.
+sqlite> delete from shows_users where (user_id) = (19);
+
+## Hints
+
+  - As with anything, if you get stuck, move on, then go back if you have time.
+  - Don't spend all night on it!
+  - Use resources online to solve harder ones - there are solutions to these questions that work with what we've learnt today, but other tools exist in SQL that could make the queries 'better' or 'easier'.
