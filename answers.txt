@@ -70,8 +70,6 @@ Balletronics|32.0
 Edinburgh Royal Tattoo|32.99
 
 4. Select the average price of all shows.
-sqlite> select avg(price) shows;
-Error: no such column: price
 sqlite> select avg(price) from shows;
 15.9569230769231
 
@@ -88,7 +86,7 @@ sqlite> select sum(price) from shows where price < 20;
 142.45
 
 8. Select the name and price of the most expensive show.
-sqlite> select max(price), name from shows;
+sqlite> select name, price from shows order by price desc limit 1;
 32.99|Edinburgh Royal Tattoo
 
 9. Select the name and price of the second from cheapest show.
